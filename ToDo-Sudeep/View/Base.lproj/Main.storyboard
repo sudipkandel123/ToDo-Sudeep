@@ -31,7 +31,16 @@
                             <outlet property="delegate" destination="f0q-hM-G6u" id="k5R-zG-EMA"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title=" Sudeep's ToDo" id="MR5-5Z-ct9"/>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" title=" Sudeep's ToDo" id="MR5-5Z-ct9">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="doj-Lw-NAg">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="addButtonPressed:" destination="f0q-hM-G6u" id="Ig7-tx-eO1"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5p2-q7-Nfi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

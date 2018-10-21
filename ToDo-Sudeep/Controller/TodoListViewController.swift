@@ -10,13 +10,23 @@ import UIKit
 
 class TodoListViewController: UITableViewController/*,UITableViewDataSource,UITableViewDelegate*/{
 //a sample array to store todO list
+    let defaults = UserDefaults.standard // store key value pair for persistent launch of the application
+    //default is the object of the userDefaults
+    
     
     //tableView.delegate = self
     //tableView.dataSource = self
     //this view controller automatically provides the delegates for the tableviewcontroller
-    let itemArray = ["Buy Peanut butter","Get my watch from alibaba","Get a sticky keypad"]
+    var itemArray = ["Buy Peanut butter","Get my watch from alibaba","Get a sticky keypad"]
     override func viewDidLoad() {
+        //print("view did load")
         super.viewDidLoad()
+        
+        //defaults is the userDefaults object
+        //error - i got an error here when i didnt use optional after type casting thread expection error
+        if let items = defaults.array(forKey: "ToDOList") as? [String]{
+            itemArray = items
+        }
     }
     //MARK - Tableview Datasource methods
     //a tableview checks for number of rows and returns total items in the array
@@ -52,5 +62,32 @@ class TodoListViewController: UITableViewController/*,UITableViewDataSource,UITa
         //if user selects first one then the console will return 0
         tableView.deselectRow(at: indexPath, animated: true)
     }
+    //MARK : - Add New Items
+    
+    @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
+        var textField = UITextField() ///because the alertTextfield is only accessible inside the addtextfield method we want it to be available gloabally so if textfield holds the alerttextfield, then it is accessible globally //matlap scope increase garna visibility of the code
+        
+        let alert = UIAlertController(title: "Add new Todo List", message: "", preferredStyle: .alert)
+        let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
+            //what will happen once the user clicks the add item in the uiAlert view
+            //print(textField.text!)
+             self.itemArray.append(textField.text!) //add new array element into itemArray //remember to put self as it is inside the closure
+            self.defaults.set(self.itemArray, forKey: "ToDOList")
+            self.tableView.reloadData() //once the new element is added to the itemArray we need to reload the new data to make it displayable in the tableview
+            
+        }
+        alert.addTextField { (alertTextField) in
+            alertTextField.placeholder = "Create New Item"
+            textField = alertTextField
+            // print(alertTextField.text)
+        }
+        alert.addAction(action)
+        //now to present that is to let it popup in the screen ie present view controller modally
+        present(alert, animated: true, completion: nil)
+        //till here when user press + the pop up will appear saying add items from the alert-action
+        //so it matters if we provide present before suppose if we provide present before then it wont be sequenced properly
+           
+    }
 }
+
 
