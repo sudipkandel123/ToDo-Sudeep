@@ -105,6 +105,7 @@
 		688EDFB321730804008FECB4 /* ToDo-Sudeep */ = {
 			isa = PBXGroup;
 			children = (
+				688EDFB421730804008FECB4 /* AppDelegate.swift */,
 				688EDFC321730804008FECB4 /* Info.plist */,
 				688EDFE521730A0F008FECB4 /* Data Model */,
 				688EDFE721730A1C008FECB4 /* Controller */,
@@ -152,7 +153,6 @@
 			isa = PBXGroup;
 			children = (
 				688EDFB621730804008FECB4 /* TodoListViewController.swift */,
-				688EDFB421730804008FECB4 /* AppDelegate.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";

@@ -7,7 +7,7 @@
 //
 
 import Foundation
-class Item
+class Item : Codable
     {
 var title : String = "" //because the title of the todo list is string
 var done : Bool = false //the boolean value at the initial point is unchecked so its false 
