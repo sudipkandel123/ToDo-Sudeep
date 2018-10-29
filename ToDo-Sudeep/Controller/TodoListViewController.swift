@@ -7,21 +7,28 @@
 //
 
 import UIKit
+import CoreData // i forgot this and couldnot perform the NSFetchRequest
 
-class TodoListViewController: UITableViewController/*,UITableViewDataSource,UITableViewDelegate*/{
+class TodoListViewController: UITableViewController /*,UITableViewDataSource,UITableViewDelegate*/{
 //a sample array to store todO list
-    var itemArray = [Item]() //item
+    var itemArray = [Item]() //ite
     //let defaults = UserDefaults.standard // store key value pair for persistent launch of the application
     //default is the object of the userDefaults
    // var itemArray = [Item]() //from Title.swift class we take the Item object
     
-    
+    var selectedCategory : Category?{
+        didSet{
+            loadItems()
+        }
+    }
     //tableView.delegate = self
     //tableView.dataSource = self
     //this view controller automatically provides the delegates for the tableviewcontroller
     
-    let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist") //file manager is a singleton which has urls for document directory in userDomainMask where user personal data are stored and it is array
-
+    //let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist") //file manager is a singleton which has urls for document directory in userDomainMask where user personal data are stored and it is array
+ 
+    
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext //from UIapplication delegate is shared and downcasted to appdelegate and  is converted to context
     
 ///////////////////////////////////////////////////////////////////////////////////////////
     
@@ -29,7 +36,7 @@ class TodoListViewController: UITableViewController/*,UITableViewDataSource,UITa
         //print("view did load")
         super.viewDidLoad()
        
-         loadItems()
+         //loadItems()
         
         
         //defaults is the userDefaults object
@@ -43,7 +50,7 @@ class TodoListViewController: UITableViewController/*,UITableViewDataSource,UITa
     
     
     /////////////////////////////////////////////////////////////////////////////////
-//MARK - Tableview Datasource methods
+    //MARK: - Tableview Datasource methods
     //a tableview checks for number of rows and returns total items in the array
     //cell hold the tableview and since table view has cells which are reusable after scrolling
     //textlabel in tableview takes the array element from indexpath and return the cell.
@@ -85,9 +92,10 @@ class TodoListViewController: UITableViewController/*,UITableViewDataSource,UITa
     //MARK :- TableView Delegate method
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //print(itemArray[indexPath.row]) //this will print what user has selected like which tableview user has selected
-        // tableView.cellForRow(at: indexPath)?.accessoryType = .none
+         tableView.cellForRow(at: indexPath)?.accessoryType = .none
         
-        
+//        context.delete(itemArray[indexPath.row])
+//        itemArray.remove(at: indexPath.row )
         itemArray[indexPath.row].done = !itemArray[indexPath.row].done
         //if itemArray is checked then when button presses it will be unchecked and vice-versa.
         
@@ -101,7 +109,7 @@ class TodoListViewController: UITableViewController/*,UITableViewDataSource,UITa
 ///////////////////////////////////////////////////////////////////////////////////////////
     
     
-//MARK :- Add New Items
+//MARK:- Add New Items
     
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
         var textField = UITextField() ///because the alertTextfield is only accessible inside the addtextfield method we want it to be available gloabally so if textfield holds the alerttextfield, then it is accessible globally //matlap scope increase garna visibility of the code
@@ -110,8 +118,13 @@ class TodoListViewController: UITableViewController/*,UITableViewDataSource,UITa
         let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
             //what will happen once the user clicks the add item in the uiAlert view
             //print(textField.text!)
-            let newItem = Item()
+            
+            
+            
+            let newItem = Item(context: self.context) //the context where item is going to be stored
             newItem.title = textField.text!
+            newItem.done = false
+            newItem.parentCategory = self.selectedCategory
              self.itemArray.append(newItem) //add new array element into itemArray //remember to put self as it is inside the closure
             self.saveItem()
             
@@ -132,18 +145,25 @@ class TodoListViewController: UITableViewController/*,UITableViewDataSource,UITa
            
     }
     
-    // MARK - Model Manipulation method
+    // MARK: - Model Manipulation method
     
 ////////////////////////////////////////////////////////////////////////////////////////////
     //saveItem is used to encode the item and done into the plist which will store as a key value or any other pair
 
     func saveItem(){
-        let encoder = PropertyListEncoder()
         do{
-            let data = try encoder.encode(itemArray)
-            try data.write(to: dataFilePath!) // i was getting error as the item.swift file was not encodable so when using encoding the referenced files should be made encodable and the file should contain only defined datatype rather than the functions.
-        }catch{
-            print("error encoding item array \(error)")
+            try self.context.save()
+            
+            
+            
+//
+//            let data = try encoder.encode(itemArray)
+//            try data.write(to: dataFilePath!) // i was getting error as the item.swift file was not encodable so when using encoding the referenced files should be made encodable and the file should contain only defined datatype rather than the functions.
+        }
+        catch
+        
+        {
+            print("error saving context \(error)")
             
         }
         self.tableView.reloadData()
@@ -153,22 +173,74 @@ class TodoListViewController: UITableViewController/*,UITableViewDataSource,UITa
     
     /////////////////////////////////////////////////////////////////////////////////
     
-    func loadItems(){
-        if let data = try? Data(contentsOf: dataFilePath!) //datafilepath is the path where the items are stored
+    func loadItems(with request : NSFetchRequest <Item> = Item.fetchRequest() ,predicate: NSPredicate? = nil) //function to save data into core data file
+        //in this function we are using internal parameter(request) external parameter(with) and if this function receives a parameter then NSFetchRequest takes the input else the default(Item.fetchRequest() works
+    
+    {
+        
+        
+        let categoryPredicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory!.name!)
+        
+        //rewriting the below code using optional binding
+        if let additionalPredicate = predicate{
+            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate,additionalPredicate])
+        }
+        else
         {
-            let decoder = PropertyListDecoder()
-            do
-            {
-                itemArray = try decoder.decode([Item].self, from: data)
-                
-            }
-            catch
-            {
-                print("Error decoding itemArray \(error)")
-            }
+            request.predicate = categoryPredicate
+        }
         
         
+        
+
+        
+//        let compoundPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate,predicate])
+//        request.predicate = predicate
+        //let request : NSFetchRequest <Item> = Item.fetchRequest()
+        do {
+          itemArray =  try context.fetch(request)
+        }
+            catch {
+                print("error fetching from data \(error)")
             }
-   }
+       tableView.reloadData()
+        
+    }
+    
+    
 
 }
+
+// MARK: - SearchBarDelegate
+extension TodoListViewController : UISearchBarDelegate
+//a extension of todolistviewcontroller which inherits UISearchBarDelegate and performs its functionalities
+{
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+         let request : NSFetchRequest <Item> = Item.fetchRequest() //request fetchs the item from the core data and gives the fetched item and stores in the request
+        //print(searchBar.text!) //searchBar.text! takes the input given by the user in the searchBar
+let predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!) //predicates in this let are like string comparisor where it queries title where contains is a comparision operator . string formats are case sensitive and [cd - case diacritic]
+        //predicates are used for requesting certain conditions
+       request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+        //request.sortDescriptors = [sortDescriptor]
+        
+        
+        loadItems(with: request , predicate: predicate) // sends the request to the loadItem method
+    }
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchBar.text?.count == 0
+        {
+            loadItems()
+            
+            DispatchQueue.main.async
+                //Dispatch Queue are used to maintain thread property
+                {
+                    searchBar.resignFirstResponder() //to remove keyboard and cursor from the search bar.
+                
+            }
+            
+        }
+    }
+    
+}
+
+

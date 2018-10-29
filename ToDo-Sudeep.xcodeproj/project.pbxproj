@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		686BE51B2184CE5B009F43AE /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 686BE51A2184CE5B009F43AE /* CategoryViewController.swift */; };
 		688EDFB521730804008FECB4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 688EDFB421730804008FECB4 /* AppDelegate.swift */; };
 		688EDFB721730804008FECB4 /* TodoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 688EDFB621730804008FECB4 /* TodoListViewController.swift */; };
 		688EDFBA21730804008FECB4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 688EDFB821730804008FECB4 /* Main.storyboard */; };
@@ -16,7 +17,6 @@
 		688EDFCD21730804008FECB4 /* ToDo_SudeepTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 688EDFCC21730804008FECB4 /* ToDo_SudeepTests.swift */; };
 		688EDFD821730805008FECB4 /* ToDo_SudeepUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 688EDFD721730805008FECB4 /* ToDo_SudeepUITests.swift */; };
 		688EDFEA21730BEF008FECB4 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 688EDFE921730BEF008FECB4 /* Default-568h@2x.png */; };
-		68E7D868217C8B9800F50FC4 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68E7D867217C8B9800F50FC4 /* Item.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,6 +37,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		686BE51A2184CE5B009F43AE /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
 		688EDFB121730804008FECB4 /* ToDo-Sudeep.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ToDo-Sudeep.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		688EDFB421730804008FECB4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		688EDFB621730804008FECB4 /* TodoListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoListViewController.swift; sourceTree = "<group>"; };
@@ -52,7 +53,6 @@
 		688EDFD721730805008FECB4 /* ToDo_SudeepUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDo_SudeepUITests.swift; sourceTree = "<group>"; };
 		688EDFD921730805008FECB4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		688EDFE921730BEF008FECB4 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		68E7D867217C8B9800F50FC4 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,7 +85,6 @@
 			children = (
 				688EDFE921730BEF008FECB4 /* Default-568h@2x.png */,
 				688EDFB321730804008FECB4 /* ToDo-Sudeep */,
-				688EDFBB21730804008FECB4 /* ToDo_Sudeep.xcdatamodeld */,
 				688EDFCB21730804008FECB4 /* ToDo-SudeepTests */,
 				688EDFD621730805008FECB4 /* ToDo-SudeepUITests */,
 				688EDFB221730804008FECB4 /* Products */,
@@ -136,7 +135,7 @@
 		688EDFE521730A0F008FECB4 /* Data Model */ = {
 			isa = PBXGroup;
 			children = (
-				68E7D867217C8B9800F50FC4 /* Item.swift */,
+				688EDFBB21730804008FECB4 /* ToDo_Sudeep.xcdatamodeld */,
 			);
 			path = "Data Model";
 			sourceTree = "<group>";
@@ -152,6 +151,7 @@
 		688EDFE721730A1C008FECB4 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				686BE51A2184CE5B009F43AE /* CategoryViewController.swift */,
 				688EDFB621730804008FECB4 /* TodoListViewController.swift */,
 			);
 			path = Controller;
@@ -298,8 +298,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				686BE51B2184CE5B009F43AE /* CategoryViewController.swift in Sources */,
 				688EDFB721730804008FECB4 /* TodoListViewController.swift in Sources */,
-				68E7D868217C8B9800F50FC4 /* Item.swift in Sources */,
 				688EDFB521730804008FECB4 /* AppDelegate.swift in Sources */,
 				688EDFBD21730804008FECB4 /* ToDo_Sudeep.xcdatamodeld in Sources */,
 			);
