@@ -7,12 +7,14 @@
 //
 
 import UIKit
-import CoreData
+import RealmSwift
+
 
 class CategoryViewController: UITableViewController {
-    var categories = [Category]() // a object of the class Category
-
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext 
+    let realm = try! Realm()
+//    var categories = [Category]() // a object of the class Category
+    var categories : Results<Category>?
+//    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext 
     
     
     override func viewDidLoad() {
@@ -28,10 +30,10 @@ class CategoryViewController: UITableViewController {
         let alert = UIAlertController(title: "Add New Category", message: "", preferredStyle: .alert)
         
         let action = UIAlertAction(title: "Add", style: .default) { (action) in
-            let newCategory = Category(context: self.context)
-            newCategory.name = textField.text
-            self.categories.append(newCategory)
-            self.saveCategories()
+            let newCategory = Category()
+            newCategory.name = textField.text!
+//            self.categories.append(newCategory) //no need to append as <Result>Category is a auto updating variable
+            self.save(category: newCategory)
             
             
         }
@@ -49,14 +51,14 @@ class CategoryViewController: UITableViewController {
     //MARK: - TableView Datasource Methods
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return categories.count
+        return categories?.count ?? 1 //nil coalescing operator returns 1 if the nil occurs ie first row selected
         
     }
     
   
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "toDoCategoryCell",for: indexPath)
-        cell.textLabel?.text = categories[indexPath.row].name
+        cell.textLabel?.text = categories?[indexPath.row].name ?? "No Categories Selected"
         
         return cell
     }
@@ -69,7 +71,7 @@ class CategoryViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let destinationVC = segue.destination as! TodoListViewController //force downcast
         if let indexPath = tableView.indexPathForSelectedRow{
-            destinationVC.selectedCategory = categories[indexPath.row]
+            destinationVC.selectedCategory = categories?[indexPath.row]
         }
     }
     
@@ -79,24 +81,27 @@ class CategoryViewController: UITableViewController {
     //MARK: - Data Manipulation Methods
     
     func loadCategories(){
-        let request:NSFetchRequest<Category> = Category.fetchRequest() //fetch all the nsmanager objects that are created using Category entity
-        do{
-            categories = try context.fetch(request) // we are going to store the result from context.fetch(request) into category array
-            
-        }
-        catch{
-            print("Error recieved while loading \(error)")
-            
-        }
-        
-        
+        categories = realm.objects(Category.self)
+//        let request:NSFetchRequest<Category> = Category.fetchRequest() //fetch all the nsmanager objects that are created using Category entity
+//        do{
+//            categories = try context.fetch(request) // we are going to store the result from context.fetch(request) into category array
+//
+//        }
+//        catch{
+//            print("Error recieved while loading \(error)")
+//
+//        }
+        tableView.reloadData()
+
         
     }
     
-    func saveCategories(){
+    func save(category : Category){
         do{
           
-            try context.save()
+            try realm.write {
+                realm.add(category)
+            }
         }
         catch{
             print("Error in saving the items \(error)")
@@ -107,17 +112,4 @@ class CategoryViewController: UITableViewController {
     
     
     //MARK: - Add New Category Method
-    
-    
-    
-    
-    
-    
-    
-    
-   
-    
-    
-    
-    
 }

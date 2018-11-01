@@ -7,11 +7,15 @@
 //
 
 import UIKit
-import CoreData // i forgot this and couldnot perform the NSFetchRequest
+import RealmSwift// i forgot this and couldnot perform the NSFetchRequest
 
 class TodoListViewController: UITableViewController /*,UITableViewDataSource,UITableViewDelegate*/{
 //a sample array to store todO list
-    var itemArray = [Item]() //ite
+    
+    
+   let realm = try! Realm()
+    
+    var todoItem : Results<Item>?
     //let defaults = UserDefaults.standard // store key value pair for persistent launch of the application
     //default is the object of the userDefaults
    // var itemArray = [Item]() //from Title.swift class we take the Item object
@@ -28,7 +32,7 @@ class TodoListViewController: UITableViewController /*,UITableViewDataSource,UIT
     //let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist") //file manager is a singleton which has urls for document directory in userDomainMask where user personal data are stored and it is array
  
     
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext //from UIapplication delegate is shared and downcasted to appdelegate and  is converted to context
+//    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext //from UIapplication delegate is shared and downcasted to appdelegate and  is converted to context
     
 ///////////////////////////////////////////////////////////////////////////////////////////
     
@@ -36,7 +40,7 @@ class TodoListViewController: UITableViewController /*,UITableViewDataSource,UIT
         //print("view did load")
         super.viewDidLoad()
        
-         //loadItems()
+         loadItems()
         
         
         //defaults is the userDefaults object
@@ -58,7 +62,7 @@ class TodoListViewController: UITableViewController /*,UITableViewDataSource,UIT
     
     /////////////////////////////////////////////////////////////////////////////////
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-         return itemArray.count
+         return todoItem?.count ?? 1
     }
     
     
@@ -69,16 +73,21 @@ class TodoListViewController: UITableViewController /*,UITableViewDataSource,UIT
     
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let item = itemArray[indexPath.row]
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "TodoItemCell", for: indexPath)
-        cell.textLabel?.text = item.title
-        
-        //Ternary operator
-        //value = condition ? valueIfTrue : valueIfFalse
-        
-        cell.accessoryType = item.done ? .checkmark : .none
-        //instead of if else we used a ternary operator
-        
+        if let item = todoItem?[indexPath.row]{
+            cell.textLabel?.text = item.title
+            
+            //Ternary operator
+            //value = condition ? valueIfTrue : valueIfFalse
+            
+            cell.accessoryType = item.done ? .checkmark : .none
+            //instead of if else we used a ternary operator
+            
+        }
+        else{
+            cell.textLabel?.text = "No Items Added"
+        }
         return cell
         // i got a error here when i did a typo mistake in indexPath as Indexpath
         //i got an error while running the code because i mistype the TodoItemCell a typo mistake again
@@ -91,21 +100,41 @@ class TodoListViewController: UITableViewController /*,UITableViewDataSource,UIT
     /////////////////////////////////////////////////////////////////////////////////
     //MARK :- TableView Delegate method
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //print(itemArray[indexPath.row]) //this will print what user has selected like which tableview user has selected
-         tableView.cellForRow(at: indexPath)?.accessoryType = .none
         
-//        context.delete(itemArray[indexPath.row])
-//        itemArray.remove(at: indexPath.row )
-        itemArray[indexPath.row].done = !itemArray[indexPath.row].done
-        //if itemArray is checked then when button presses it will be unchecked and vice-versa.
-        
-        saveItem()
-        //tableView.reloadData() //this is required because each time we need to refresh the action performed by the user
+        if let item = todoItem?[indexPath.row]{
+            do{
+                 try realm.write {
+                item.done = !item.done
+                }}
+            catch{
+                print("Error saving the data \(error)")
 
-        
-        //if user selects first one then the console will return 0
+            }
+            
+        }
         tableView.deselectRow(at: indexPath, animated: true)
+        tableView.reloadData()
+        
     }
+        
+        
+        
+        
+        
+//        //print(itemArray[indexPath.row]) //this will print what user has selected like which tableview user has selected
+//         tableView.cellForRow(at: indexPath)?.accessoryType = .none
+//
+////        context.delete(itemArray[indexPath.row])
+////        itemArray.remove(at: indexPath.row )
+////        todoItem[indexPath.row].done = !todoItem[indexPath.row].done
+////        //if itemArray is ch ecked then when button presses it will be unchecked and vice-versa.
+////
+////        saveItem()
+////        //tableView.reloadData() //this is required because each time we need to refresh the action performed by the user
+//
+//
+//        //if user selects first one then the console will return 0
+    
 ///////////////////////////////////////////////////////////////////////////////////////////
     
     
@@ -119,18 +148,28 @@ class TodoListViewController: UITableViewController /*,UITableViewDataSource,UIT
             //what will happen once the user clicks the add item in the uiAlert view
             //print(textField.text!)
             
-            
-            
-            let newItem = Item(context: self.context) //the context where item is going to be stored
-            newItem.title = textField.text!
-            newItem.done = false
-            newItem.parentCategory = self.selectedCategory
-             self.itemArray.append(newItem) //add new array element into itemArray //remember to put self as it is inside the closure
-            self.saveItem()
-            
-            //self.defaults.set(self.itemArray, forKey: "ToDOList")
+            if let currentCategory = self.selectedCategory{
+                do{
+                    try self.realm.write {
+                    let newItem = Item() //the context where item is going to be stored
+                    newItem.title = textField.text!
+                    newItem.dateCreated = Date() //every newItem we create we will have a date
+                    currentCategory.items.append(newItem)
+                }
+            }
+                catch{
+                    print("The error has occured \(error)")
+                }}
             self.tableView.reloadData() //once the new element is added to the itemArray we need to reload the new data to make it displayable in the tableview
             
+            
+//            newItem.parentCategory = self.selectedCategory
+//             self.itemArray.append(newItem) //add new array element into itemArray //remember to put self as it is inside the closure
+//            self.saveItem()
+//
+//            //self.defaults.set(self.itemArray, forKey: "ToDOList")
+//
+//
         }
         alert.addTextField { (alertTextField) in
             alertTextField.placeholder = "Create New Item"
@@ -150,62 +189,61 @@ class TodoListViewController: UITableViewController /*,UITableViewDataSource,UIT
 ////////////////////////////////////////////////////////////////////////////////////////////
     //saveItem is used to encode the item and done into the plist which will store as a key value or any other pair
 
-    func saveItem(){
-        do{
-            try self.context.save()
-            
-            
-            
+//    func saveItem(){
+//        do{
 //
-//            let data = try encoder.encode(itemArray)
-//            try data.write(to: dataFilePath!) // i was getting error as the item.swift file was not encodable so when using encoding the referenced files should be made encodable and the file should contain only defined datatype rather than the functions.
-        }
-        catch
-        
-        {
-            print("error saving context \(error)")
-            
-        }
-        self.tableView.reloadData()
-        
-    }
+//
+//
+////
+////            let data = try encoder.encode(itemArray)
+////            try data.write(to: dataFilePath!) // i was getting error as the item.swift file was not encodable so when using encoding the referenced files should be made encodable and the file should contain only defined datatype rather than the functions.
+//        }
+//        catch
+//
+//        {
+//            print("error saving context \(error)")
+//
+//        }
+//        self.tableView.reloadData()
+//
+//    }
     
     
     /////////////////////////////////////////////////////////////////////////////////
-    
-    func loadItems(with request : NSFetchRequest <Item> = Item.fetchRequest() ,predicate: NSPredicate? = nil) //function to save data into core data file
+    func loadItems(){
+    //func loadItems(with request : NSFetchRequest <Item> = Item.fetchRequest() ,predicate: NSPredicate? = nil) //function to save data into core data file
         //in this function we are using internal parameter(request) external parameter(with) and if this function receives a parameter then NSFetchRequest takes the input else the default(Item.fetchRequest() works
-    
-    {
-        
-        
-        let categoryPredicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory!.name!)
-        
-        //rewriting the below code using optional binding
-        if let additionalPredicate = predicate{
-            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate,additionalPredicate])
-        }
-        else
-        {
-            request.predicate = categoryPredicate
-        }
-        
-        
-        
 
-        
-//        let compoundPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate,predicate])
-//        request.predicate = predicate
-        //let request : NSFetchRequest <Item> = Item.fetchRequest()
-        do {
-          itemArray =  try context.fetch(request)
-        }
-            catch {
-                print("error fetching from data \(error)")
-            }
-       tableView.reloadData()
+    todoItem = selectedCategory?.items.sorted(byKeyPath: "dateCreated", ascending: true)
+        tableView.reloadData()
         
     }
+
+//        let categoryPredicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory!.name!)
+//
+//        //rewriting the below code using optional binding
+//        if let additionalPredicate = predicate{
+//            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate,additionalPredicate])
+//        }
+//        else
+//        {
+//            request.predicate = categoryPredicate
+//        }
+//
+//
+//
+//
+//
+////        let compoundPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate,predicate])
+////        request.predicate = predicate
+//        //let request : NSFetchRequest <Item> = Item.fetchRequest()
+//        do {
+//          itemArray =  try context.fetch(request)
+//        }
+//            catch {
+//                print("error fetching from data \(error)")
+//            }
+       
     
     
 
@@ -216,31 +254,41 @@ extension TodoListViewController : UISearchBarDelegate
 //a extension of todolistviewcontroller which inherits UISearchBarDelegate and performs its functionalities
 {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-         let request : NSFetchRequest <Item> = Item.fetchRequest() //request fetchs the item from the core data and gives the fetched item and stores in the request
-        //print(searchBar.text!) //searchBar.text! takes the input given by the user in the searchBar
-let predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!) //predicates in this let are like string comparisor where it queries title where contains is a comparision operator . string formats are case sensitive and [cd - case diacritic]
-        //predicates are used for requesting certain conditions
-       request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
-        //request.sortDescriptors = [sortDescriptor]
         
+        todoItem = todoItem?.filter("title CONTAINS[cd] %@", searchBar.text!).sorted(byKeyPath: "dateCreated", ascending: true)
+        tableView.reloadData()
         
-        loadItems(with: request , predicate: predicate) // sends the request to the loadItem method
     }
+        
+        
+        
+        
+//         let request : NSFetchRequest <Item> = Item.fetchRequest() //request fetchs the item from the core data and gives the fetched item and stores in the request
+//        //print(searchBar.text!) //searchBar.text! takes the input given by the user in the searchBar
+//let predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!) //predicates in this let are like string comparisor where it queries title where contains is a comparision operator . string formats are case sensitive and [cd - case diacritic]
+//        //predicates are used for requesting certain conditions
+//       request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+//        //request.sortDescriptors = [sortDescriptor]
+//
+//
+//        loadItems(with: request , predicate: predicate) // sends the request to the loadItem method
+//
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchBar.text?.count == 0
         {
             loadItems()
-            
+
             DispatchQueue.main.async
                 //Dispatch Queue are used to maintain thread property
                 {
                     searchBar.resignFirstResponder() //to remove keyboard and cursor from the search bar.
-                
+
             }
-            
+
         }
     }
-    
-}
+
+    }
+
 
 
