@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		00554709C4321EB5A6FAE8DA /* Pods_ToDo_Sudeep.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 593DA36D4266FC7D45A11860 /* Pods_ToDo_Sudeep.framework */; };
 		686BE51B2184CE5B009F43AE /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 686BE51A2184CE5B009F43AE /* CategoryViewController.swift */; };
 		688EDFB521730804008FECB4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 688EDFB421730804008FECB4 /* AppDelegate.swift */; };
 		688EDFB721730804008FECB4 /* TodoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 688EDFB621730804008FECB4 /* TodoListViewController.swift */; };
@@ -37,6 +38,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0EC97792C6CC0641E56726EE /* Pods-ToDo-Sudeep.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ToDo-Sudeep.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ToDo-Sudeep/Pods-ToDo-Sudeep.debug.xcconfig"; sourceTree = "<group>"; };
+		593DA36D4266FC7D45A11860 /* Pods_ToDo_Sudeep.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ToDo_Sudeep.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		686BE51A2184CE5B009F43AE /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
 		688EDFB121730804008FECB4 /* ToDo-Sudeep.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ToDo-Sudeep.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		688EDFB421730804008FECB4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -53,6 +56,7 @@
 		688EDFD721730805008FECB4 /* ToDo_SudeepUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDo_SudeepUITests.swift; sourceTree = "<group>"; };
 		688EDFD921730805008FECB4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		688EDFE921730BEF008FECB4 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		8C2979CE6B37BF2F21FE4F1C /* Pods-ToDo-Sudeep.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ToDo-Sudeep.release.xcconfig"; path = "Pods/Target Support Files/Pods-ToDo-Sudeep/Pods-ToDo-Sudeep.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +64,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00554709C4321EB5A6FAE8DA /* Pods_ToDo_Sudeep.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -80,6 +85,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		06F034CC55D7EF0221954511 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				0EC97792C6CC0641E56726EE /* Pods-ToDo-Sudeep.debug.xcconfig */,
+				8C2979CE6B37BF2F21FE4F1C /* Pods-ToDo-Sudeep.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		688EDFA821730804008FECB4 = {
 			isa = PBXGroup;
 			children = (
@@ -88,6 +102,8 @@
 				688EDFCB21730804008FECB4 /* ToDo-SudeepTests */,
 				688EDFD621730805008FECB4 /* ToDo-SudeepUITests */,
 				688EDFB221730804008FECB4 /* Products */,
+				06F034CC55D7EF0221954511 /* Pods */,
+				FF7ADFA681764376A174048B /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -166,6 +182,14 @@
 			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		FF7ADFA681764376A174048B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				593DA36D4266FC7D45A11860 /* Pods_ToDo_Sudeep.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -173,9 +197,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 688EDFDC21730805008FECB4 /* Build configuration list for PBXNativeTarget "ToDo-Sudeep" */;
 			buildPhases = (
+				2D7E03B8F494157FEC92754C /* [CP] Check Pods Manifest.lock */,
 				688EDFAD21730804008FECB4 /* Sources */,
 				688EDFAE21730804008FECB4 /* Frameworks */,
 				688EDFAF21730804008FECB4 /* Resources */,
+				C5936B4241878FCB955680CB /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -292,6 +318,55 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		2D7E03B8F494157FEC92754C /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ToDo-Sudeep-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C5936B4241878FCB955680CB /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-ToDo-Sudeep/Pods-ToDo-Sudeep-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
+				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ToDo-Sudeep/Pods-ToDo-Sudeep-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		688EDFAD21730804008FECB4 /* Sources */ = {
@@ -474,6 +549,7 @@
 		};
 		688EDFDD21730805008FECB4 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0EC97792C6CC0641E56726EE /* Pods-ToDo-Sudeep.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -492,6 +568,7 @@
 		};
 		688EDFDE21730805008FECB4 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8C2979CE6B37BF2F21FE4F1C /* Pods-ToDo-Sudeep.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
