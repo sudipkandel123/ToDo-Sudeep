@@ -18,6 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
        // print(Realm.Configuration.defaultConfiguration.fileURL)
+        //to check if the realm is installing correctly or not 
         
         do{
             let realm = try Realm()
