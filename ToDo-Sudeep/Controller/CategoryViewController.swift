@@ -13,13 +13,13 @@ import RealmSwift
 class CategoryViewController: UITableViewController {
     let realm = try! Realm()
 //    var categories = [Category]() // a object of the class Category
-    var categories : Results<Category>?
+    var categories : Results<Category>? //collection of results of object category
 //    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext 
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        loadCategories()
+        loadCategories() //load all the category when the view loads
 
     }
 
@@ -31,9 +31,9 @@ class CategoryViewController: UITableViewController {
         
         let action = UIAlertAction(title: "Add", style: .default) { (action) in
             let newCategory = Category()
-            newCategory.name = textField.text!
+            newCategory.name = textField.text! ////adding new Category in db
 //            self.categories.append(newCategory) //no need to append as <Result>Category is a auto updating variable
-            self.save(category: newCategory)
+            self.save(category: newCategory) //to update to the existing realm database
             
             
         }
@@ -60,6 +60,8 @@ class CategoryViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "toDoCategoryCell",for: indexPath)
         cell.textLabel?.text = categories?[indexPath.row].name ?? "No Categories Selected"
         
+        
+        /////now if the noof rows is 1 ie when the category is empty , then the cell returns the "no categories selected" and if the item is added then the cell returns the categories[indexpath.row] i.e. all row values
         return cell
     }
     
@@ -81,7 +83,7 @@ class CategoryViewController: UITableViewController {
     //MARK: - Data Manipulation Methods
     
     func loadCategories(){
-        categories = realm.objects(Category.self)
+        categories = realm.objects(Category.self) /////look in to the realm and fetch all the object of the type category
 //        let request:NSFetchRequest<Category> = Category.fetchRequest() //fetch all the nsmanager objects that are created using Category entity
 //        do{
 //            categories = try context.fetch(request) // we are going to store the result from context.fetch(request) into category array
@@ -91,7 +93,8 @@ class CategoryViewController: UITableViewController {
 //            print("Error recieved while loading \(error)")
 //
 //        }
-        tableView.reloadData()
+        tableView.reloadData() //// then reload with the new updated data
+        ////reload data performs datasource methods
 
         
     }
@@ -99,7 +102,8 @@ class CategoryViewController: UITableViewController {
     func save(category : Category){
         do{
           
-            try realm.write {
+            try realm.write //to commit the changes in existing realm databases  passed in addbuttonpressed functionalities
+            {
                 realm.add(category)
             }
         }
